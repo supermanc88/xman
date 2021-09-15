@@ -13,12 +13,13 @@ namespace xman {
     static LoadModuleHelper* m_plugins[200] = {NULL};
     static int m_num_plugins = 0;
 
-    int loadPlugins(char *plugins[], char *folder = XMAN_PLUGIN_PATH)
+    int loadPlugins(const char* const* plugins, char *folder = XMAN_PLUGIN_PATH)
     {
+        HMODULE base_module = GetModuleHandleA(NULL);
         for (int i = 0; i < 200 && plugins[i] != NULL; i++)
         {
             LoadModuleHelper *l = new LoadModuleHelper();
-            if (l->load(plugins[i], NULL, folder))
+            if (l->load(plugins[i], base_module, folder))
             {
                 m_plugins[m_num_plugins++] = l;
             }
@@ -46,7 +47,7 @@ namespace xman {
     // 利用c++的构造和析构
     struct AutoLoadPlugins
     {
-        AutoLoadPlugins(char *plugins[], char *folder = XMAN_PLUGIN_PATH)
+        AutoLoadPlugins(const char* const* plugins, char *folder = XMAN_PLUGIN_PATH)
         {
             loadPlugins(plugins, folder);
         }

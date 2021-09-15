@@ -22,15 +22,25 @@ namespace xman {
 
         }
 
-        bool load(char *plugin_name, HMODULE base_module = NULL, char *folder = "")
+        bool load(const char *plugin_name, HMODULE base_module = NULL, char *folder = "")
         {
             unload();
 
             // 判断是否是绝对路径
-
             // 如果不是绝对路径，就补全
-
-            m_hModule = xmanLoadLibrary(plugin_name);
+            char full_plugin_name[MAX_PATH] = {0};
+            if (PathIsRelativeA(plugin_name))
+            {
+                GetModuleFileNameA(base_module, full_plugin_name, MAX_PATH);
+                PathRemoveFileSpecA(full_plugin_name);
+                PathAppendA(full_plugin_name, folder);
+                PathAppendA(full_plugin_name, plugin_name);
+                m_hModule = xmanLoadLibrary(full_plugin_name);
+            }
+            else
+            {
+                m_hModule = xmanLoadLibrary((char *)plugin_name);
+            }
 
             return m_hModule != NULL;
         }

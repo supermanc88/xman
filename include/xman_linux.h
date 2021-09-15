@@ -11,7 +11,18 @@
 #include <dlfcn.h>
 #include <unistd.h>
 
+#include "xman_linux_str.h"
+
 typedef void* HMODULE;
+
+#ifndef MAX_PATH
+#define MAX_PATH    512
+#endif
+
+static inline void seterr(const char* err)
+{
+    if (err) {}
+}
 
 /**
  * @brief 和windows同名的获取函数地址
@@ -24,10 +35,10 @@ void* GetProcAddress(HMODULE hModule, char *name)
     void *sym = NULL;
     if (hModule)
     {
-        sym = slsym(hModule, name);
+        sym = dlsym(hModule, name);
         if (!sym)
         {
-            seterr(slerror());
+            seterr(dlerror());
         }
     }
 
@@ -44,15 +55,24 @@ void* GetProcAddress(HMODULE hModule, char *name)
 int GetModuleFileNameA(HMODULE hmod, char* filename, int size)
 {
     *filename = 0;
-
+    int ret = 0;
     if (!hmod)
     {
         size_t bytes = readlink("/proc/self/exe", filename, size);
         if (bytes > 0)
             filename[bytes < size - 1 ? bytes : size - 1] = '\0';
+
+        ret = bytes;
     }
 
-    return bytes;
+    return ret;
+}
+
+
+
+HMODULE GetModuleHandleA(const char* filename)
+{
+    return NULL;
 }
 
 HMODULE xmanLoadLibrary(char *plugin_name)
