@@ -3,6 +3,8 @@
 
 #include "xmanager.h"
 
+#include "xman_plugin.h"
+
 int main(int argc, char* argv[])
 {
     printf("testing\n");

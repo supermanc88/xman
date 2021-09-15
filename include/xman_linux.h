@@ -20,12 +20,7 @@ typedef void* HMODULE;
 #define MAX_PATH    512
 #endif
 
-#define OUTAPI      extern "C" __attribute__((visibility("default")))
-#if defined(__APPLE__)
-#define LOCALAPI
-#else
-#define LOCALAPI    __attribute__((visibility("hidden")))
-#endif
+
 
 static inline void seterr(const char* err)
 {
