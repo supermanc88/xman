@@ -5,8 +5,17 @@
 #ifndef XMAN_XMANWIN_H
 #define XMAN_XMANWIN_H
 
+#include <windows.h>
+
 #include <shlwapi.h>
 #pragma comment(lib, "shlwapi.lib")
+
+#ifdef __GNUC__
+#define OUTAPI      extern "C" __attribute__((dllexport))
+#else
+#define OUTAPI      extern "C" __declspec(dllexport)
+#endif
+#define LOCALAPI
 
 HMODULE xmanLoadLibrary(const char *plugin_name)
 {

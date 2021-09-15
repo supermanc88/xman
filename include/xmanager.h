@@ -10,18 +10,23 @@
 
 
 namespace xman {
-    static LoadModuleHelper* m_plugins[200] = {NULL};
-    static int m_num_plugins = 0;
-
     int loadPlugins(const char* const* plugins, char *folder = XMAN_PLUGIN_PATH)
     {
         HMODULE base_module = GetModuleHandleA(NULL);
-        for (int i = 0; i < 200 && plugins[i] != NULL; i++)
+        for (int i = 0; i < (XMAN_MAX_PLUGIN_NUM - g_plugins_num) && plugins[i] != NULL; i++)
         {
             LoadModuleHelper *l = new LoadModuleHelper();
             if (l->load(plugins[i], base_module, folder))
             {
-                m_plugins[m_num_plugins++] = l;
+                for ( int j = 0; j < XMAN_MAX_PLUGIN_NUM; j++)
+                {
+                    if(g_plugins[j] == NULL)
+                    {
+                        g_plugins[j] = l;
+                        break;
+                    }
+                }
+                g_plugins_num++;
             }
             else
             {
@@ -29,18 +34,75 @@ namespace xman {
             }
         }
 
-        return m_num_plugins;
+        return g_plugins_num;
+    }
+
+    int loadPlugin(char *plugin, char *folder = XMAN_PLUGIN_PATH)
+    {
+        HMODULE base_module = GetModuleHandleA(NULL);
+        if (XMAN_MAX_PLUGIN_NUM > g_plugins_num && plugin)
+        {
+            LoadModuleHelper *l = new LoadModuleHelper();
+            if (l->load(plugin, base_module, folder))
+            {
+                for ( int j = 0; j < XMAN_MAX_PLUGIN_NUM; j++)
+                {
+                    if(g_plugins[j] == NULL)
+                    {
+                        g_plugins[j] = l;
+                        break;
+                    }
+                }
+                g_plugins_num++;
+            }
+            else
+            {
+                delete l;
+            }
+        }
+        return g_plugins_num;
     }
 
     void unloadPlugins()
     {
-        for (int i = m_num_plugins - 1; i >= 0; i--)
+        for (int i = g_plugins_num - 1; i >= 0; i--)
         {
-            delete m_plugins[i];
-            m_plugins[i] = NULL;
+            delete g_plugins[i];
+            g_plugins[i] = NULL;
         }
 
-        m_num_plugins = 0;
+        g_plugins_num = 0;
+    }
+
+    void unloadPlugin(char *plugin, char *folder = XMAN_PLUGIN_PATH)
+    {
+        HMODULE base_module = GetModuleHandleA(NULL);
+        char full_plugin_name[MAX_PATH] = {0};
+        if (PathIsRelativeA(plugin))
+        {
+            GetModuleFileNameA(base_module, full_plugin_name, MAX_PATH);
+            PathRemoveFileSpecA(full_plugin_name);
+            PathAppendA(full_plugin_name, folder);
+            PathAppendA(full_plugin_name, plugin);
+        }
+        else
+        {
+            strcpy(full_plugin_name, plugin);
+        }
+
+        for (int i = 0; i < g_plugins_num; i++)
+        {
+            if (strcmp(g_plugins[i]->GetPluginPath(), full_plugin_name) == 0)
+            {
+                delete g_plugins[i];
+                g_plugins[i] = NULL;
+
+                g_plugins_num--;
+
+                break;
+            }
+        }
+
     }
 
 

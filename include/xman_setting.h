@@ -5,12 +5,7 @@
 #ifndef XMAN_XMAN_SETTING_H
 #define XMAN_XMAN_SETTING_H
 
-#ifdef __GNUC__
-
-#else
-#include <windows.h>
-#endif // __GNUC__
-
 #define XMAN_PLUGIN_PATH ""
+#define XMAN_MAX_PLUGIN_NUM     512
 
 #endif //XMAN_XMAN_SETTING_H
