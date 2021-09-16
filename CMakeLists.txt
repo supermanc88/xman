@@ -38,3 +38,4 @@ endif()
 
 add_subdirectory(demo/plugin1)
 add_subdirectory(demo/plugin2)
+add_subdirectory(demo/plugin3)

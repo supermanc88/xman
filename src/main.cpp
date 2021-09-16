@@ -7,13 +7,16 @@
 //
 //#include "xman_obj_helper.h"
 
-#include "../demo/plugin2/plugin2.h"
+#include "../demo/plugin3/plugin3.h"
 
 int main(int argc, char* argv[])
 {
     printf("testing\n");
     char* plugins[] = {
-            "libplugin1.so", "libplugin2.so", NULL
+//            "libplugin1.so",
+//            "libplugin2.so",
+            "libplugin3.so",
+            NULL
     };
     xman::AutoLoadPlugins autoload(plugins, "plugin");
 //    char* plugins1[] = {
@@ -29,7 +32,7 @@ int main(int argc, char* argv[])
 
         if (o)
         {
-            Child * c = (Child *)o;
+            Child * c = (Child*)o;
 
             c->show();
         }
