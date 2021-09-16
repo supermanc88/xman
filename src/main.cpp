@@ -5,6 +5,8 @@
 
 #include "xman_plugin.h"
 
+#include "xman_obj_helper.h"
+
 int main(int argc, char* argv[])
 {
     printf("testing\n");
