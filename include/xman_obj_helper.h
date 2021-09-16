@@ -27,13 +27,12 @@ namespace xman {
         ~xmanObject() {};
     };
 
-
-#define XMAN_DEFINE_CLASS(_CLASS) \
-OUTAPI xmanObject *xman_create_object_XgoCzmhoeZUiFBwEKdZ1()\
-{                              \
-    _CLASS * c = new _CLASS();    \
-    return (xmanObject *)c;\
 }
 
+#define XMAN_DEFINE_CLASS(_CLASS) \
+OUTAPI xman::xmanObject *xman_create_object_XgoCzmhoeZUiFBwEKdZ1()\
+{                              \
+    _CLASS * c = new _CLASS();    \
+    return (xman::xmanObject *)c;\
 }
 #endif //XMAN_XMAN_OBJ_HELPER_H

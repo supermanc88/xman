@@ -19,7 +19,7 @@ message(${SRC_LISTS})
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 message(${EXECUTABLE_OUTPUT_PATH})
 
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/lib)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/plugin)
 message(${LIBRARY_OUTPUT_PATH})
 
 # 测试unix
@@ -33,3 +33,8 @@ if (CMAKE_SYSTEM_NAME MATCHES "Linux")
     message("platform: Linux")
     target_link_libraries(${PROJECT_NAME} -ldl)
 endif()
+
+
+
+add_subdirectory(demo/plugin1)
+add_subdirectory(demo/plugin2)
