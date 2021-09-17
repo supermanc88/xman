@@ -18,7 +18,7 @@
 namespace xman {
     class LoadModuleHelper;
 
-    static LoadModuleHelper* g_plugins[200] = {NULL};
+    static LoadModuleHelper* g_plugins[XMAN_MAX_PLUGIN_NUM] = {NULL};
     static int g_plugins_num = 0;
 
 #define XMAN_PLUGIN_FUNC_GET_VERSION            "get_version_XgoCzmhoeZUiFBwEKdZ1"
@@ -32,7 +32,11 @@ namespace xman {
         public:
         LoadModuleHelper() : m_hModule(NULL)
         {
-            memset(m_plugin_path, MAX_PATH, 0);
+            memset(m_full_plugin_path, 0, MAX_PATH);
+            memset(m_plugin_version, 0, MAX_PATH);
+            memset(m_plugin_name, 0, MAX_PATH);
+            memset(m_plugin_folder, 0, MAX_PATH);
+            m_create_object_fun = NULL;
         }
         ~LoadModuleHelper()
         {
@@ -59,14 +63,14 @@ namespace xman {
                 if (IsAlreadyLoaded(full_plugin_name))
                     return false;
                 m_hModule = xmanLoadLibrary(full_plugin_name);
-                strcpy(m_plugin_path, full_plugin_name);
+                strcpy(m_full_plugin_path, full_plugin_name);
             }
             else
             {
                 if (IsAlreadyLoaded(full_plugin_name))
                     return false;
                 m_hModule = xmanLoadLibrary((char *)plugin_name);
-                strcpy(m_plugin_path, plugin_name);
+                strcpy(m_full_plugin_path, plugin_name);
             }
 
             // 加载初始化接口
@@ -88,12 +92,15 @@ namespace xman {
             {
                 xmanFreeLibrary(m_hModule);
                 m_hModule = NULL;
-                memset(m_plugin_path, 0, MAX_PATH);
+                memset(m_full_plugin_path, 0, MAX_PATH);
                 return false;
             }
 
             init_plugin();
             get_version(m_plugin_version, MAX_PATH);
+
+            strcpy(m_plugin_name, plugin_name);
+            strcpy(m_plugin_folder, folder);
 
             return m_hModule != NULL;
         }
@@ -113,7 +120,7 @@ namespace xman {
 
         char *GetPluginPath()
         {
-            return m_plugin_path;
+            return m_full_plugin_path;
         }
 
         xmanObject *CreateObject()
@@ -140,7 +147,9 @@ namespace xman {
             return false;
         }
         HMODULE m_hModule;
-        char m_plugin_path[MAX_PATH];
+        char m_full_plugin_path[MAX_PATH];
+        char m_plugin_name[MAX_PATH];
+        char m_plugin_folder[MAX_PATH];
         char m_plugin_version[MAX_PATH];
         void *m_create_object_fun;
     };

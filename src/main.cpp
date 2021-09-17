@@ -7,7 +7,8 @@
 //
 //#include "xman_obj_helper.h"
 
-#include "../demo/plugin3/plugin3.h"
+//#include "../demo/plugin3/plugin3.h"
+#include "../demo/plugin2/plugin2.h"
 
 int main(int argc, char* argv[])
 {

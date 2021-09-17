@@ -107,17 +107,27 @@ namespace xman {
 
 
     // 利用c++的构造和析构
+    // 适用于用完就卸载的插件
     struct AutoLoadPlugins
     {
         AutoLoadPlugins(const char* const* plugins, char *folder = XMAN_PLUGIN_PATH)
         {
             loadPlugins(plugins, folder);
+            this->plugins = (char **)plugins;
+            this->folder = folder;
         }
 
         ~AutoLoadPlugins()
         {
-            unloadPlugins();
+//            unloadPlugins();
+            for (int i = 0; plugins[i] != NULL; i++)
+            {
+                unloadPlugin(plugins[i], folder);
+            }
         }
+
+        char ** plugins = NULL;
+        char *folder = NULL;
     };
 
 } // namespace xman
