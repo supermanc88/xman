@@ -20,3 +20,6 @@ OUTAPI void free_plugin_XgoCzmhoeZUiFBwEKdZ1()
 
 XMAN_DEFINE_CLASS(Child)
 
+void Child::show() {
+    printf("Child\n");
+}

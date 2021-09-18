@@ -10,23 +10,24 @@
 
 
 namespace xman {
+
     int loadPlugins(const char* const* plugins, char *folder = XMAN_PLUGIN_PATH)
     {
         HMODULE base_module = GetModuleHandleA(NULL);
-        for (int i = 0; i < (XMAN_MAX_PLUGIN_NUM - g_plugins_num) && plugins[i] != NULL; i++)
+        for (int i = 0; i < (XMAN_MAX_PLUGIN_NUM - PLUGIN_STORE_NUM_VAR(PROJECT_NAME)) && plugins[i] != NULL; i++)
         {
             LoadModuleHelper *l = new LoadModuleHelper();
             if (l->load(plugins[i], base_module, folder))
             {
                 for ( int j = 0; j < XMAN_MAX_PLUGIN_NUM; j++)
                 {
-                    if(g_plugins[j] == NULL)
+                    if(PLUGIN_STORE_VAR(PROJECT_NAME)[j] == NULL)
                     {
-                        g_plugins[j] = l;
+                        PLUGIN_STORE_VAR(PROJECT_NAME)[j] = l;
                         break;
                     }
                 }
-                g_plugins_num++;
+                PLUGIN_STORE_NUM_VAR(PROJECT_NAME)++;
             }
             else
             {
@@ -34,44 +35,44 @@ namespace xman {
             }
         }
 
-        return g_plugins_num;
+        return PLUGIN_STORE_NUM_VAR(PROJECT_NAME);
     }
 
     int loadPlugin(char *plugin, char *folder = XMAN_PLUGIN_PATH)
     {
         HMODULE base_module = GetModuleHandleA(NULL);
-        if (XMAN_MAX_PLUGIN_NUM > g_plugins_num && plugin)
+        if (XMAN_MAX_PLUGIN_NUM > PLUGIN_STORE_NUM_VAR(PROJECT_NAME) && plugin)
         {
             LoadModuleHelper *l = new LoadModuleHelper();
             if (l->load(plugin, base_module, folder))
             {
                 for ( int j = 0; j < XMAN_MAX_PLUGIN_NUM; j++)
                 {
-                    if(g_plugins[j] == NULL)
+                    if(PLUGIN_STORE_VAR(PROJECT_NAME)[j] == NULL)
                     {
-                        g_plugins[j] = l;
+                        PLUGIN_STORE_VAR(PROJECT_NAME)[j] = l;
                         break;
                     }
                 }
-                g_plugins_num++;
+                PLUGIN_STORE_NUM_VAR(PROJECT_NAME)++;
             }
             else
             {
                 delete l;
             }
         }
-        return g_plugins_num;
+        return PLUGIN_STORE_NUM_VAR(PROJECT_NAME);
     }
 
     void unloadPlugins()
     {
-        for (int i = g_plugins_num - 1; i >= 0; i--)
+        for (int i = PLUGIN_STORE_NUM_VAR(PROJECT_NAME) - 1; i >= 0; i--)
         {
-            delete g_plugins[i];
-            g_plugins[i] = NULL;
+            delete PLUGIN_STORE_VAR(PROJECT_NAME)[i];
+            PLUGIN_STORE_VAR(PROJECT_NAME)[i] = NULL;
         }
 
-        g_plugins_num = 0;
+        PLUGIN_STORE_NUM_VAR(PROJECT_NAME) = 0;
     }
 
     void unloadPlugin(char *plugin, char *folder = XMAN_PLUGIN_PATH)
@@ -90,14 +91,14 @@ namespace xman {
             strcpy(full_plugin_name, plugin);
         }
 
-        for (int i = 0; i < g_plugins_num; i++)
+        for (int i = 0; i < PLUGIN_STORE_NUM_VAR(PROJECT_NAME); i++)
         {
-            if (strcmp(g_plugins[i]->GetPluginPath(), full_plugin_name) == 0)
+            if (strcmp(PLUGIN_STORE_VAR(PROJECT_NAME)[i]->GetPluginPath(), full_plugin_name) == 0)
             {
-                delete g_plugins[i];
-                g_plugins[i] = NULL;
+                delete PLUGIN_STORE_VAR(PROJECT_NAME)[i];
+                PLUGIN_STORE_VAR(PROJECT_NAME)[i] = NULL;
 
-                g_plugins_num--;
+                PLUGIN_STORE_NUM_VAR(PROJECT_NAME)--;
 
                 break;
             }

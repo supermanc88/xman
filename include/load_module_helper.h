@@ -18,8 +18,23 @@
 namespace xman {
     class LoadModuleHelper;
 
-    static LoadModuleHelper* g_plugins[XMAN_MAX_PLUGIN_NUM] = {NULL};
-    static int g_plugins_num = 0;
+//    static LoadModuleHelper* g_plugins[XMAN_MAX_PLUGIN_NUM] = {NULL};
+//    static int g_plugins_num = 0;
+
+#ifndef PROJECT_NAME
+#define PROJECT_NAME
+#endif // PROJECT_NAME
+
+#define PLUGIN_STORE_DEFINE(x) \
+static LoadModuleHelper* g_plugins_##x[XMAN_MAX_PLUGIN_NUM] = {NULL};
+#define PLUGIN_STORE_VAR(x) g_plugins_##x
+
+    PLUGIN_STORE_DEFINE(PROJECT_NAME)
+
+#define PLUGIN_STORE_NUM_DEFINE(x) \
+static int g_plugins_num_##x = 0;
+    PLUGIN_STORE_NUM_DEFINE(PROJECT_NAME)
+#define PLUGIN_STORE_NUM_VAR(x) g_plugins_num_##x
 
 #define XMAN_PLUGIN_FUNC_GET_VERSION            "get_version_XgoCzmhoeZUiFBwEKdZ1"
 #define XMAN_PLUGIN_FUNC_INIT_PLUGIN            "init_plugin_XgoCzmhoeZUiFBwEKdZ1"
@@ -139,9 +154,14 @@ namespace xman {
         private:
         bool IsAlreadyLoaded(char *plugin_path)
         {
-            for (int i = 0; i < g_plugins_num; i++)
+//            for (int i = 0; i < g_plugins_num; i++)
+//            {
+//                if (strcmp(g_plugins[i]->GetPluginPath(), plugin_path) == 0)
+//                    return true;
+//            }
+            for (int i = 0; i < PLUGIN_STORE_NUM_VAR(PROJECT_NAME); i++)
             {
-                if (strcmp(g_plugins[i]->GetPluginPath(), plugin_path) == 0)
+                if (strcmp(PLUGIN_STORE_VAR(PROJECT_NAME)[i]->GetPluginPath(), plugin_path) == 0)
                     return true;
             }
             return false;
