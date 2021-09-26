@@ -138,6 +138,11 @@ static int g_plugins_num_##x = 0;
             return m_full_plugin_path;
         }
 
+        char *GetPluginFolder()
+        {
+            return m_plugin_folder;
+        }
+
         xmanObject *CreateObject()
         {
             xmanObject *obj = NULL;
