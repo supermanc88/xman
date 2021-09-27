@@ -143,6 +143,11 @@ static int g_plugins_num_##x = 0;
             return m_plugin_folder;
         }
 
+        HMODULE GetPluginModuleHandle()
+        {
+            return m_hModule;
+        }
+
         xmanObject *CreateObject()
         {
             xmanObject *obj = NULL;
