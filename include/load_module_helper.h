@@ -22,7 +22,10 @@ namespace xman {
 //    static int g_plugins_num = 0;
 
 #ifndef PROJECT_NAME
-#define PROJECT_NAME
+// #define PROJECT_NAME
+
+// 当发现没有定义这个宏的时候，直接编译报错
+#error No defined constant Symbol "PROJECT_NAME"
 #endif // PROJECT_NAME
 
 #define PLUGIN_STORE_DEFINE(x) \
