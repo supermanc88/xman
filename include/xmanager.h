@@ -127,8 +127,8 @@ namespace xman {
             }
         }
 
-        char ** plugins = NULL;
-        char *folder = NULL;
+        char ** plugins;
+        char *folder;
     };
 
 } // namespace xman

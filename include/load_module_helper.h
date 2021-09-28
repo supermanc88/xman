@@ -148,6 +148,11 @@ static int g_plugins_num_##x = 0;
             return m_hModule;
         }
 
+        char *GetPluginName()
+        {
+            return m_plugin_name;
+        }
+
         xmanObject *CreateObject()
         {
             xmanObject *obj = NULL;
